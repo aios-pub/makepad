@@ -478,6 +478,7 @@ fn register_crate_resource_parts(
     let Some((abs_path, dependency_path, web_url)) =
         resolve_crate_resource_paths(vm, crate_part, file_path)
     else {
+        crate::log!("crate_resource register FAILED: crate_part={} file_path={}", crate_part, file_path);
         return NIL;
     };
     let heap_key = vm.bx.heap.heap_key();
@@ -685,6 +686,7 @@ impl Cx {
 
             #[cfg(not(target_arch = "wasm32"))]
             {
+                crate::log!("resource load FAILED: abs={} dep={:?} packaged={}", res.abs_path, res.dependency_path, is_packaged);
                 res.data = CxScriptResourceData::Error(format!(
                     "Failed to load resource: {} (dep: {:?}, packaged: {})",
                     res.abs_path, res.dependency_path, is_packaged,
